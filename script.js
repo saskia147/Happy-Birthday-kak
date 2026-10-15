@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const audio = document.getElementById('birthdayMusic');
 
     const confettiEmojis = ['💗', '💕', '💖', '✨', '🎀', '🌸', '⭐'];
-
     let surpriseOpened = false;
 
+    // Membuat confetti
     function createConfetti() {
         if (!confettiContainer) return;
 
@@ -16,10 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const piece = document.createElement('span');
 
             piece.className = 'confetti';
-            piece.textContent =
-                confettiEmojis[
-                    Math.floor(Math.random() * confettiEmojis.length)
-                ];
+            piece.textContent = confettiEmojis[
+                Math.floor(Math.random() * confettiEmojis.length)
+            ];
 
             piece.style.left = Math.random() * 100 + 'vw';
             piece.style.setProperty(
@@ -41,18 +40,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Tombol Open Your Surprise
     if (surpriseBtn && surpriseMessage) {
         surpriseBtn.addEventListener('click', async () => {
+            // Tampilkan pesan saat pertama kali diklik
             if (!surpriseOpened) {
-                // Tampilkan pesan ulang tahun
                 surpriseMessage.hidden = false;
                 surpriseBtn.textContent = 'Yay! Sending you hugs! 💗';
                 surpriseOpened = true;
 
-                // Jalankan animasi confetti
                 createConfetti();
 
-                // Gulir ke pesan ulang tahun
                 surpriseMessage.scrollIntoView({
                     behavior: 'smooth',
                     block: 'nearest'
@@ -61,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 createConfetti();
             }
 
-            // Putar musik setelah tombol diklik
+            // Musik tidak boleh menghalangi munculnya pesan
             if (audio && audio.paused) {
                 try {
                     audio.volume = 0.5;
@@ -71,8 +69,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
+    } else {
+        console.error(
+            'Tombol surpriseBtn atau pesan surpriseMessage tidak ditemukan.'
+        );
     }
 
+    // Efek ketika musik dimainkan atau dijeda
     if (audio) {
         audio.addEventListener('play', () => {
             document.body.classList.add('play-music');
