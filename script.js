@@ -40,6 +40,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     surpriseBtn.addEventListener('click', () => {
+        if (audio){
+            audio.volume = 0.5;
+
+            try {
+                await audio.play();
+            } catch (error) {
+                consule.error("Musik gagal diputar:", error);
+            }
+        }
         if (!surpriseOpened) {
             surpriseMessage.hidden = false;
             surpriseBtn.textContent = 'Yay! Sending you hugs! 💗';
