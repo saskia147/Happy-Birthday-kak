@@ -6,9 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const audio = document.getElementById('birthdayMusic');
 
     const confettiEmojis = ['💗', '💕', '💖', '✨', '🎀', '🌸', '⭐'];
+
     let surpriseOpened = false;
 
-    // Membuat confetti
+    // Fungsi untuk membuat confetti
     function createConfetti() {
         if (!confettiContainer) return;
 
@@ -16,9 +17,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const piece = document.createElement('span');
 
             piece.className = 'confetti';
-            piece.textContent = confettiEmojis[
-                Math.floor(Math.random() * confettiEmojis.length)
-            ];
+            piece.textContent =
+                confettiEmojis[
+                    Math.floor(Math.random() * confettiEmojis.length)
+                ];
 
             piece.style.left = Math.random() * 100 + 'vw';
             piece.style.setProperty(
@@ -43,14 +45,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Tombol Open Your Surprise
     if (surpriseBtn && surpriseMessage) {
         surpriseBtn.addEventListener('click', async () => {
-            // Tampilkan pesan saat pertama kali diklik
+
+            // Tampilkan pesan ulang tahun
             if (!surpriseOpened) {
                 surpriseMessage.hidden = false;
-                surpriseBtn.textContent = 'Yay! Sending you hugs! 💗';
                 surpriseOpened = true;
 
+                surpriseBtn.textContent =
+                    'Yay! Sending you hugs! 💗';
+
+                // Confetti
                 createConfetti();
 
+                // Gulir menuju pesan
                 surpriseMessage.scrollIntoView({
                     behavior: 'smooth',
                     block: 'nearest'
@@ -59,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 createConfetti();
             }
 
-            // Musik tidak boleh menghalangi munculnya pesan
+            // Putar musik tanpa menghalangi pesan muncul
             if (audio && audio.paused) {
                 try {
                     audio.volume = 0.5;
@@ -71,11 +78,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     } else {
         console.error(
-            'Tombol surpriseBtn atau pesan surpriseMessage tidak ditemukan.'
+            'Elemen tombol atau pesan tidak ditemukan. Periksa ID di index.html.'
         );
     }
 
-    // Efek ketika musik dimainkan atau dijeda
+    // Efek ketika musik diputar
     if (audio) {
         audio.addEventListener('play', () => {
             document.body.classList.add('play-music');
