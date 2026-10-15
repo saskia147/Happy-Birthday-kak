@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let surpriseOpened = false;
 
     function createConfetti() {
+        if (!confettiContainer) return;
+
         for (let i = 0; i < 45; i++) {
             const piece = document.createElement('span');
 
@@ -39,31 +41,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    surpriseBtn.addEventListener('click', () => {
-        if (audio){
-            audio.volume = 0.5;
+    if (surpriseBtn && surpriseMessage) {
+        surpriseBtn.addEventListener('click', async () => {
+            if (!surpriseOpened) {
+                // Tampilkan pesan ulang tahun
+                surpriseMessage.hidden = false;
+                surpriseBtn.textContent = 'Yay! Sending you hugs! 💗';
+                surpriseOpened = true;
 
-            try {
-                await audio.play();
-            } catch (error) {
-                consule.error("Musik gagal diputar:", error);
+                // Jalankan animasi confetti
+                createConfetti();
+
+                // Gulir ke pesan ulang tahun
+                surpriseMessage.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest'
+                });
+            } else {
+                createConfetti();
             }
-        }
-        if (!surpriseOpened) {
-            surpriseMessage.hidden = false;
-            surpriseBtn.textContent = 'Yay! Sending you hugs! 💗';
-            surpriseOpened = true;
 
-            createConfetti();
-
-            surpriseMessage.scrollIntoView({
-                behavior: 'smooth',
-                block: 'nearest'
-            });
-        } else {
-            createConfetti();
-        }
-    });
+            // Putar musik setelah tombol diklik
+            if (audio && audio.paused) {
+                try {
+                    audio.volume = 0.5;
+                    await audio.play();
+                } catch (error) {
+                    console.error('Musik gagal diputar:', error);
+                }
+            }
+        });
+    }
 
     if (audio) {
         audio.addEventListener('play', () => {
